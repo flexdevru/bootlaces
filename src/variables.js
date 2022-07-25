@@ -1,3 +1,3 @@
-var showhelp_var = "template-dnd_showhelp";
-var completed_var = "template-dnd_completed";
-var store_var = "template-dnd_store";
+var showhelp_var = "template-bootlaces_showhelp";
+var completed_var = "template-bootlaces_completed";
+var store_var = "template-bootlaces_store";

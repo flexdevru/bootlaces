@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { Application } from '../Application';
+import {Application} from '../Application';
 //import { jsPDF } from "jspdf";
 //---------- Point ----------
 
@@ -83,10 +83,10 @@ export class Rectangle {
 
 	public intersection(rectangle: Rectangle): Rectangle {
 		var x1 = rectangle.x, y1 = rectangle.y, x2 = x1 + rectangle.width, y2 = y1 + rectangle.height;
-		if (this.x > x1) { x1 = this.x; }
-		if (this.y > y1) { y1 = this.y; }
-		if (this.x + this.width < x2) { x2 = this.x + this.width; }
-		if (this.y + this.height < y2) { y2 = this.y + this.height; }
+		if (this.x > x1) {x1 = this.x;}
+		if (this.y > y1) {y1 = this.y;}
+		if (this.x + this.width < x2) {x2 = this.x + this.width;}
+		if (this.y + this.height < y2) {y2 = this.y + this.height;}
 		return (x2 <= x1 || y2 <= y1) ? new Rectangle() : new Rectangle(x1, y1, x2 - x1, y2 - y1);
 	}
 }
@@ -219,12 +219,36 @@ export class DottedLine extends PIXI.Sprite {
 			}
 
 		}
-		
+
 		this.texture = Application.instance.renderer.generateTexture(graph);
 		this.addChild(graph);
-		
+
 	}
 }
+
+export class DashedLine extends PIXI.Sprite {
+
+	constructor(points: Array<PIXI.Point>, color: number, weight: number = 1, pattern: Array<number> = [2, 2]) {
+		super();
+
+		let canvas: HTMLCanvasElement = document.createElement('canvas') as HTMLCanvasElement;
+		canvas.width = Application.WIDTH;
+		canvas.height = Application.HEIGHT;
+
+		let ctx: CanvasRenderingContext2D = canvas.getContext('2d') as CanvasRenderingContext2D;
+		ctx.strokeStyle = rgba_create(color);
+		ctx.lineWidth = weight;
+		ctx.setLineDash(pattern);
+		ctx.beginPath();
+		ctx.moveTo(points[0].x, points[0].y);
+		ctx.lineTo(points[1].x, points[1].y);
+		ctx.stroke();
+
+		this.texture = new PIXI.Texture(PIXI.BaseTexture.from(canvas));
+	}
+}
+
+
 
 export class TextureHelper {
 
@@ -565,26 +589,26 @@ export class SaveImage {
 		a.click();
 		window.URL.revokeObjectURL(url);
 	}
-/*
-	public saveCanvasToPDF = (canvas: HTMLCanvasElement, fileName: string) => {
-		console.log('canvas', canvas.width, canvas.height);
-		this.fileName = fileName;
-		
-		let pdf = new jsPDF({orientation: 'l', unit: 'px', format: [canvas.width, canvas.height]});
-		pdf.addImage(canvas, 'PNG', 0, 0, canvas.width, canvas.height);
-		pdf.save(this.fileName);
-	}
-
-	public saveToPDF = (source: PIXI.DisplayObject, fileName: string) => {
-
-		let canvas: HTMLCanvasElement = Application.instance.renderer.plugins.extract.canvas(source);
-		console.log('canvas', canvas.width, canvas.height);
-		this.fileName = fileName;
-		let pdf = new jsPDF({ orientation: 'l', unit: 'px', format: [canvas.width, canvas.height] });
-		pdf.addImage(canvas, 'PNG', 0, 0, canvas.width, canvas.height);
-		pdf.save(this.fileName);
-	}
-	*/
+	/*
+		public saveCanvasToPDF = (canvas: HTMLCanvasElement, fileName: string) => {
+			console.log('canvas', canvas.width, canvas.height);
+			this.fileName = fileName;
+			
+			let pdf = new jsPDF({orientation: 'l', unit: 'px', format: [canvas.width, canvas.height]});
+			pdf.addImage(canvas, 'PNG', 0, 0, canvas.width, canvas.height);
+			pdf.save(this.fileName);
+		}
+	
+		public saveToPDF = (source: PIXI.DisplayObject, fileName: string) => {
+	
+			let canvas: HTMLCanvasElement = Application.instance.renderer.plugins.extract.canvas(source);
+			console.log('canvas', canvas.width, canvas.height);
+			this.fileName = fileName;
+			let pdf = new jsPDF({ orientation: 'l', unit: 'px', format: [canvas.width, canvas.height] });
+			pdf.addImage(canvas, 'PNG', 0, 0, canvas.width, canvas.height);
+			pdf.save(this.fileName);
+		}
+		*/
 }
 
 export var rgba_create = function (color: number, alpha: number = 1): string {
@@ -703,9 +727,9 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: n
 	}
 
 	if (typeof radius === 'number') {
-		var radiuses: any = { tl: radius, tr: radius, br: radius, bl: radius };
+		var radiuses: any = {tl: radius, tr: radius, br: radius, bl: radius};
 	} else {
-		var defaultRadius = { tl: 0, tr: 0, br: 0, bl: 0 };
+		var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
 		for (var side in defaultRadius) {
 			radiuses[side] = radiuses[side] || defaultRadius[side];
 		}

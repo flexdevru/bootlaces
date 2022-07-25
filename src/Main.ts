@@ -4,7 +4,6 @@ import {StorylineManager} from './managers/StorylineManager';
 import {ImageMarginButton} from './buttons/ImageMarginButton';
 import {Tutorial} from './tutorial/Tutorial';
 import {ReflectionRight} from './reflection/ReflectionRight';
-import {Application} from './Application';
 import {Game} from './game/Game';
 
 
@@ -45,7 +44,7 @@ export class Main extends PIXI.Container {
 		this.game.show();
 
 		this.btn_look = new ImageMarginButton('btn_look');
-		this.addChild(this.btn_look).position.set(Application.WIDTH / 2 - this.btn_look.width / 2, 918);
+		this.addChild(this.btn_look).position.set(725, 942);
 		this.btn_look.addListener('press', this.onLookClick);
 		this.btn_look.visible = false;
 
@@ -64,21 +63,13 @@ export class Main extends PIXI.Container {
 	private onTutorialComplete = () => {
 
 		this.tutorial.hide();
-		this.game.resetFilter();
 	}
 
 	private onGameComplete = () => {
 
-		if (this.game.correct == true) {
-
-			setTimeout(this.reflection_right.show, 1000);
-			new StorylineManager().completedValue = 1;
-			//this.onReflectionRightComplete();
-		}
-		else {
-
-			this.game.retry();
-		}
+		setTimeout(this.reflection_right.show, 1000);
+		let data: Object = AssetsManager.instance.getObject('data');
+		new StorylineManager().completedValue = 1;
 	}
 
 	private onReflectionRightComplete = () => {
